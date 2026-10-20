@@ -1,0 +1,363 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#eeedff">
+  <title>Checkout | CloudCart</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/checkout_flow.css') }}">
+
+  <style>
+    /* Remove product button */
+    .checkout-remove-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 7px;
+      padding: 6px 10px;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      background: #fff1f2;
+      color: #be123c;
+      font-family: inherit;
+      font-size: 10px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .checkout-remove-btn:hover {
+      background: #be123c;
+      color: #ffffff;
+      border-color: #be123c;
+    }
+
+    .checkout-remove-btn:focus-visible {
+      outline: 3px solid #c4b5fd;
+      outline-offset: 2px;
+    }
+
+    .cc-cart-product {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .cc-cart-line {
+      align-items: center;
+    }
+  </style>
+</head>
+
+<body class="cc-flow-page">
+
+  <div class="cc-announcement">
+    <span>✦ Thoughtful tech. Delivered to your door.</span>
+    <i></i>
+    <span>♢ Secure checkout</span>
+    <i></i>
+    <span>↻ Easy returns</span>
+  </div>
+
+  <header class="cc-flow-header">
+    <a class="cc-brand" href="{{ url_for('home') }}">
+      <span class="cc-brand-mark">✦</span>CloudCart
+    </a>
+
+    <div class="cc-checkout-steps">
+      <span class="step-active"><b>1</b> Delivery &amp; payment</span>
+      <span class="step-line"></span>
+      <span><b>2</b> Confirmation</span>
+    </div>
+
+    <a class="cc-back-link" href="{{ url_for('home') }}">
+      ← Continue shopping
+    </a>
+  </header>
+
+  <main class="cc-flow-main">
+
+    <section class="cc-flow-hero">
+      <div>
+        <p class="cc-eyebrow">ALMOST YOURS</p>
+        <h1>Make it <em>official.</em></h1>
+        <p>Confirm your delivery details and review your order before placing it.</p>
+      </div>
+
+      <div class="cc-hero-art" aria-hidden="true">
+        <span class="cc-art-circle"></span>
+        <span class="cc-art-box">▣</span>
+        <span class="cc-art-spark">✦</span>
+      </div>
+    </section>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="cc-flashes" role="status">
+          {% for message in messages %}
+            <p>{{ message }}</p>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <form class="cc-checkout-grid"
+          action="{{ url_for('checkout') }}"
+          method="post">
+
+      <!-- DELIVERY AND PAYMENT -->
+      <section class="cc-panel cc-delivery-panel">
+
+        <div class="cc-section-title">
+          <span class="cc-step-icon">01</span>
+          <div>
+            <p class="cc-eyebrow">DELIVERY DETAILS</p>
+            <h2>Where should we send it?</h2>
+          </div>
+        </div>
+
+        <div class="cc-customer-note">
+          <span class="cc-avatar">
+            {{ (current_user.name or 'C')[:1]|upper }}
+          </span>
+
+          <div>
+            <small>CHECKING OUT AS</small>
+            <strong>{{ current_user.name }}</strong>
+          </div>
+
+          <span class="cc-verified">✓ Signed in</span>
+        </div>
+
+        <div class="cc-form-grid">
+
+          <label class="cc-field cc-field-wide" for="address">
+            Street address <span>*</span>
+            <input
+              id="address"
+              name="address"
+              type="text"
+              placeholder="House / flat number, street and area"
+              autocomplete="street-address"
+              required
+            >
+          </label>
+
+          <label class="cc-field" for="city">
+            City <span>*</span>
+            <input
+              id="city"
+              name="city"
+              type="text"
+              placeholder="e.g. Chennai"
+              autocomplete="address-level2"
+              required
+            >
+          </label>
+
+          <label class="cc-field" for="postal_code">
+            PIN code <span>*</span>
+            <input
+              id="postal_code"
+              name="postal_code"
+              type="text"
+              inputmode="numeric"
+              pattern="[0-9]{6}"
+              maxlength="6"
+              placeholder="6-digit PIN code"
+              autocomplete="postal-code"
+              required
+            >
+          </label>
+
+        </div>
+
+        <div class="cc-section-title cc-payment-title">
+          <span class="cc-step-icon">02</span>
+          <div>
+            <p class="cc-eyebrow">PAYMENT METHOD</p>
+            <h2>Choose how to pay</h2>
+          </div>
+        </div>
+
+        <div class="cc-payment-options">
+
+          <label class="cc-payment-option">
+            <input
+              type="radio"
+              name="payment_method"
+              value="cod"
+              checked
+            >
+            <span class="cc-payment-symbol">₹</span>
+            <span class="cc-payment-copy">
+              <strong>Cash on Delivery</strong>
+              <small>Pay when your order arrives</small>
+            </span>
+            <span class="cc-radio-mark"></span>
+          </label>
+
+          <label class="cc-payment-option">
+            <input
+              type="radio"
+              name="payment_method"
+              value="UPI"
+            >
+            <span class="cc-payment-symbol">⌁</span>
+            <span class="cc-payment-copy">
+              <strong>UPI</strong>
+              <small>Demo option — no payment is processed</small>
+            </span>
+            <span class="cc-radio-mark"></span>
+          </label>
+
+          <label class="cc-payment-option">
+            <input
+              type="radio"
+              name="payment_method"
+              value="Card"
+            >
+            <span class="cc-payment-symbol">▤</span>
+            <span class="cc-payment-copy">
+              <strong>Credit / debit card</strong>
+              <small>Demo option — no card details required</small>
+            </span>
+            <span class="cc-radio-mark"></span>
+          </label>
+
+        </div>
+
+        <p class="cc-demo-note">
+          🔒 This student project records your selected payment method only.
+          It does not process real online payments.
+        </p>
+
+      </section>
+
+      <!-- ORDER SUMMARY -->
+      <aside class="cc-panel cc-summary-panel">
+
+        <div class="cc-summary-heading">
+          <div>
+            <p class="cc-eyebrow">YOUR SELECTION</p>
+            <h2>Order summary</h2>
+          </div>
+
+          <span class="cc-items-count">
+            {{ cart_items|length }}
+            item{% if cart_items|length != 1 %}s{% endif %}
+          </span>
+        </div>
+
+        <div class="cc-cart-lines">
+
+          {% for item in cart_items %}
+
+            <div class="cc-cart-line">
+
+              <div class="cc-product-thumb">
+                <span>✦</span>
+              </div>
+
+              <div class="cc-cart-product">
+                <strong>{{ item.name }}</strong>
+                <small>Quantity: {{ item.quantity }}</small>
+
+                <!-- REMOVE FROM CHECKOUT -->
+                <button
+                  type="submit"
+                  class="checkout-remove-btn"
+                  formaction="{{ url_for('remove_from_cart', product_id=item.id) }}"
+                  formmethod="post"
+                  formnovalidate
+                  aria-label="Remove {{ item.name }} from cart"
+                  onclick="return confirm('Remove {{ item.name }} from your cart?');"
+                >
+                  <span aria-hidden="true">🗑</span>
+                  <span>Remove</span>
+                </button>
+              </div>
+
+              <strong class="cc-line-price">
+                ₹{{ "%.2f"|format(item.subtotal|float) }}
+              </strong>
+
+            </div>
+
+          {% else %}
+
+            <div class="cc-empty-cart">
+              <span>▤</span>
+              <strong>Your cart is empty</strong>
+              <p>Add a product before checking out.</p>
+              <a href="{{ url_for('home') }}">Browse products →</a>
+            </div>
+
+          {% endfor %}
+
+        </div>
+
+        <div class="cc-price-row">
+          <span>Subtotal</span>
+          <strong>₹{{ "%.2f"|format(total|float) }}</strong>
+        </div>
+
+        <div class="cc-price-row">
+          <span>Shipping</span>
+          <strong class="cc-free">FREE</strong>
+        </div>
+
+        <div class="cc-price-row">
+          <span>Taxes</span>
+          <strong>Included</strong>
+        </div>
+
+        <div class="cc-total-row">
+          <span>Total due</span>
+          <strong>₹{{ "%.2f"|format(total|float) }}</strong>
+        </div>
+
+        <button
+          class="cc-primary-button"
+          type="submit"
+          {% if not cart_items %}disabled{% endif %}
+        >
+          Place my order <span>→</span>
+        </button>
+
+        <div class="cc-trust-note">
+          <span>♢</span>
+          <p>
+            <strong>Checkout with confidence</strong>
+            <small>
+              Your account and order details stay linked to your CloudCart profile.
+            </small>
+          </p>
+        </div>
+
+        <a class="cc-summary-back" href="{{ url_for('home') }}">
+          ← Back to shopping
+        </a>
+
+      </aside>
+
+    </form>
+
+  </main>
+
+  <footer class="cc-flow-footer">
+    <a class="cc-brand" href="{{ url_for('home') }}">
+      <span class="cc-brand-mark">✦</span>CloudCart
+    </a>
+    <span>Better tech. Brighter everyday.</span>
+    <span>© CloudCart student project</span>
+  </footer>
+
+</body>
+</html>

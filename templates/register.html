@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#eeedff">
+  <title>Create Account | CloudCart</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/account_orders.css') }}">
+</head>
+<body class="account-page">
+  <header class="account-topbar">
+    <a class="brand" href="{{ url_for('home') }}"><span class="brand-mark">✦</span><span>CloudCart</span></a>
+    <a class="account-back-link" href="{{ url_for('home') }}">← Back to store</a>
+  </header>
+
+  <main class="account-layout register-layout">
+    <section class="account-showcase">
+      <div class="account-glow"></div>
+      <p class="eyebrow"><span>✦</span> A SMARTER WAY TO SHOP</p>
+      <h1>Your next favourite<br><em>gadget is waiting.</em></h1>
+      <p class="account-showcase-copy">Create your CloudCart account for a simpler way to shop, manage your orders and discover your next everyday essential.</p>
+      <div class="account-perks">
+        <div><span>◇</span><p><strong>One place for your orders</strong><small>Review purchases whenever you need</small></p></div>
+        <div><span>ϟ</span><p><strong>Discover your next upgrade</strong><small>Explore audio, wearables and gaming gear</small></p></div>
+      </div>
+      <div class="account-product-orb orb-one"></div>
+      <div class="account-product-orb orb-two"></div>
+      <div class="account-showcase-foot">CLOUDCART · BETTER TECH, BRIGHTER EVERYDAY</div>
+    </section>
+
+    <section class="account-panel-wrap">
+      <div class="account-panel">
+        <div class="account-panel-mark">✦</div>
+        <p class="account-kicker">JOIN THE COMMUNITY</p>
+        <h2>Create your account</h2>
+        <p class="account-subtitle">A few details and you're ready to explore.</p>
+
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <div class="account-flashes" role="status">
+              {% for message in messages %}<p>{{ message }}</p>{% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+
+        <form action="{{ url_for('register') }}" method="post" class="account-form">
+          <label for="name">Full name</label>
+          <input id="name" type="text" name="name" placeholder="Your full name" autocomplete="name" required>
+          <label for="email">Email address</label>
+          <input id="email" type="email" name="email" placeholder="you@example.com" autocomplete="email" required>
+          <label for="password">Password</label>
+          <input id="password" type="password" name="password" placeholder="At least 8 characters" minlength="8" autocomplete="new-password" required>
+          <button class="account-submit" type="submit">Create account <span>→</span></button>
+        </form>
+        <p class="account-switch">Already have an account? <a href="{{ url_for('login') }}">Login</a></p>
+        <div class="account-secure"><span>♢</span> Your details are used to manage your account.</div>
+      </div>
+    </section>
+  </main>
+  <footer class="account-footer"><span>© CloudCart</span><span>Made for your everyday tech</span><a href="{{ url_for('home') }}">Continue browsing →</a></footer>
+</body>
+</html>

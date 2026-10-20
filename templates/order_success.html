@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#eeedff">
+  <title>Order Confirmed | CloudCart</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/checkout_flow.css') }}">
+</head>
+<body class="cc-flow-page cc-success-page">
+  <div class="cc-announcement"><span>✦ Order placed. Good choice.</span><i></i><span>♢ Thanks for shopping with CloudCart</span></div>
+  <header class="cc-flow-header">
+    <a class="cc-brand" href="{{ url_for('home') }}"><span class="cc-brand-mark">✦</span>CloudCart</a>
+    <nav class="cc-flow-nav"><a href="{{ url_for('home') }}">Shop</a><a href="{{ url_for('my_orders') }}">My orders</a></nav>
+    <a class="cc-back-link" href="{{ url_for('home') }}">Continue shopping ↗</a>
+  </header>
+
+  <main class="cc-success-main">
+    <div class="cc-success-decoration cc-success-decoration-one"></div><div class="cc-success-decoration cc-success-decoration-two"></div>
+    <section class="cc-success-card">
+      <div class="cc-success-check"><span>✓</span><i></i><b></b></div>
+      <p class="cc-eyebrow">ORDER SUCCESSFULLY PLACED</p>
+      <h1>It's a <em>yes!</em></h1>
+      <p class="cc-success-lead">Your order is in the system. Thanks for making CloudCart part of your everyday.</p>
+      <div class="cc-confirmation-number"><span>YOUR ORDER NUMBER</span><strong>#{{ order.id }}</strong><span class="cc-status-pill {% if order.status == 'Cancelled' %}cc-status-cancelled{% elif order.status == 'Delivered' %}cc-status-delivered{% else %}cc-status-active{% endif %}"><i></i>{{ order.status }}</span></div>
+      <div class="cc-success-total"><span>Order total</span><strong>₹{{ "%.2f"|format(order.total|float) }}</strong></div>
+      <div class="cc-success-timeline">
+        <div class="cc-timeline-item timeline-done"><span>✓</span><div><strong>Order placed</strong><small>Your order has been recorded.</small></div></div>
+        <div class="cc-timeline-item {% if order.status != 'Cancelled' %}timeline-current{% endif %}"><span>2</span><div><strong>Preparing your order</strong><small>Next, your order can be prepared for dispatch.</small></div></div>
+        <div class="cc-timeline-item"><span>3</span><div><strong>Delivered to your door</strong><small>We hope you love your new tech.</small></div></div>
+      </div>
+      <div class="cc-success-actions">
+        <a class="cc-primary-button" href="{{ url_for('order_detail', order_id=order.id) }}">View order details <span>→</span></a>
+        <a class="cc-secondary-button" href="{{ url_for('my_orders') }}">Go to my orders</a>
+      </div>
+      <p class="cc-demo-note">This is an order confirmation for your CloudCart project. Payment and delivery tracking are demonstration features.</p>
+    </section>
+    <div class="cc-success-foot"><span>✦</span> Better tech. Brighter everyday.</div>
+  </main>
+  <footer class="cc-flow-footer"><a class="cc-brand" href="{{ url_for('home') }}"><span class="cc-brand-mark">✦</span>CloudCart</a><span>Thanks for shopping with us.</span><span>© CloudCart student project</span></footer>
+</body>
+</html>

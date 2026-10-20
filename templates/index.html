@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#e9eaff">
+  <title>CloudCart — Better Tech. Brighter Everyday.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="announcement">
+    <span>✦ Free shipping on orders over ₹999</span><i></i>
+    <span>↻ Easy 30-day returns</span><i></i>
+    <span>♢ Secure payments</span>
+  </div>
+
+  <header class="site-header">
+    <a class="brand" href="/">
+      <span class="brand-mark"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M7 25a10 10 0 0 1 4-19 12 12 0 0 1 22 5 8 8 0 0 1-1 16H13" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/><path d="M14 20h13" stroke="#b9f22e" stroke-width="4" stroke-linecap="round"/></svg></span>
+      <span>CloudCart</span>
+    </a>
+
+    <button class="mobile-menu" id="mobileMenu" aria-label="Open navigation" aria-expanded="false">☰</button>
+    <nav class="main-nav" id="mainNav">
+      <a class="active" href="#home">Home</a>
+      <a href="#products">Shop</a>
+      <a href="#deals">Deals</a>
+      <a href="#categories">Categories</a>
+      {% if current_user.is_authenticated %}
+        <a href="{{ url_for('my_orders') }}">Track Order</a>
+      {% else %}
+        <a href="{{ url_for('login') }}">Track Order</a>
+      {% endif %}
+    </nav>
+
+    <form class="search-box" action="#products" method="get" role="search">
+      <input id="productSearch" type="search" placeholder="Search products, brands and more..." aria-label="Search products">
+      <button type="submit" aria-label="Search">⌕</button>
+    </form>
+
+    <div class="header-actions">
+      {% if current_user.is_authenticated %}
+        <a class="header-action" href="{{ url_for('my_orders') }}"><span>♙</span><small>Orders</small></a>
+        <a class="header-action cart-action" href="{{ url_for('checkout') }}"><span>🛒<b>{{ session.get('cart', {})|length }}</b></span><small>Cart</small></a>
+        <a class="header-action" href="{{ url_for('logout') }}"><span>↪</span><small>Logout</small></a>
+      {% else %}
+        <a class="header-action" href="{{ url_for('login') }}"><span>♙</span><small>Account</small></a>
+        <a class="header-action cart-action" href="{{ url_for('login') }}"><span>🛒</span><small>Cart</small></a>
+      {% endif %}
+    </div>
+  </header>
+
+  <main>
+    <section class="hero page-width" id="home">
+      <div class="hero-copy">
+        <p class="eyebrow"><span>ϟ</span> NEXT-GEN TECH, SMARTER LIVING</p>
+        <h1>Upgrade Your Lifestyle With <em>CloudCart</em></h1>
+        <p class="hero-description">Discover premium electronics, smart gadgets and everyday essentials — all in one place. Better tech. Brighter everyday.</p>
+        <div class="hero-buttons">
+          <a class="button button-lime" href="#products">Shop Now <span>→</span></a>
+          <a class="button button-outline" href="#deals">View Deals</a>
+        </div>
+        <div class="hero-benefits">
+          <div><span class="benefit-icon">♧</span><p><strong>Free Shipping</strong><small>On orders over ₹999</small></p></div>
+          <div><span class="benefit-icon">♢</span><p><strong>Secure Payments</strong><small>Protected checkout</small></p></div>
+          <div><span class="benefit-icon">↻</span><p><strong>Easy Returns</strong><small>30-day policy</small></p></div>
+        </div>
+      </div>
+      <div class="hero-art">
+        <div class="hero-orb"></div>
+        <div class="hero-sale"><small>UP TO</small><strong>40<span>%</span></strong><small>OFF</small></div>
+        <img class="hero-headphones" src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=900&q=85" alt="Premium wireless headphones">
+        <div class="floating-product watch-float"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=500&q=80" alt="Smart watch"></div>
+        <div class="floating-product speaker-float"><img src="https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?auto=format&fit=crop&w=600&q=80" alt="Bluetooth speaker"></div>
+        <div class="hero-caption"><span class="caption-dot"></span> TECH FOR A BRIGHTER TOMORROW</div>
+        <div class="hero-sparkles">✦ &nbsp; · &nbsp; ✧ &nbsp; · &nbsp; ✦</div>
+      </div>
+    </section>
+
+    <section class="category-strip page-width" id="categories" aria-label="Shop categories">
+      <a class="category-tile selected" href="#products"><span>▦</span><small>All Categories</small></a>
+      <a class="category-tile" href="#products" data-category="headphone"><span>♬</span><small>Headphones</small></a>
+      <a class="category-tile" href="#products" data-category="watch"><span>◷</span><small>Smart Watches</small></a>
+      <a class="category-tile" href="#products" data-category="speaker"><span>◉</span><small>Bluetooth Speakers</small></a>
+      <a class="category-tile" href="#products" data-category="mouse"><span>⌁</span><small>Gaming Accessories</small></a>
+      <a class="category-tile" href="#products"><span>▯</span><small>Mobiles</small></a>
+      <a class="category-tile" href="#products"><span>▱</span><small>Laptops</small></a>
+      <a class="category-tile" href="#products"><span>◇</span><small>Accessories</small></a>
+    </section>
+
+    <section class="feature-band page-width">
+      <article><span class="feature-icon">◇</span><div><h3>Premium Quality</h3><p>Carefully selected products from trusted brands.</p></div></article>
+      <article><span class="feature-icon">ϟ</span><div><h3>Best Prices</h3><p>Great deals on the latest tech.</p></div></article>
+      <article><span class="feature-icon">♧</span><div><h3>Fast & Reliable</h3><p>Quick delivery across India.</p></div></article>
+      <article><span class="feature-icon">♢</span><div><h3>Secure Shopping</h3><p>Your data and payments are always safe.</p></div></article>
+    </section>
+
+    <section class="products-section page-width" id="products">
+      <div class="section-heading">
+        <div><p class="eyebrow">CURATED FOR YOU</p><h2>Top Picks for You <span>✦</span></h2></div>
+        <p class="product-count">{{ products|length }} products <span>→</span></p>
+      </div>
+
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <div class="flash-messages">{% for message in messages %}<p>{{ message }}</p>{% endfor %}</div>
+        {% endif %}
+      {% endwith %}
+
+      <div class="product-grid" id="productGrid">
+        {% for product in products %}
+          {% set pname = product.name|lower %}
+          <article class="product-card" data-name="{{ product.name|lower }}">
+            <div class="product-image-wrap">
+              {% if 'headphone' in pname %}
+                <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=700&q=85" alt="{{ product.name }}" loading="lazy">
+              {% elif 'watch' in pname %}
+                <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=700&q=85" alt="{{ product.name }}" loading="lazy">
+              {% elif 'speaker' in pname %}
+                <img src="https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?auto=format&fit=crop&w=700&q=85" alt="{{ product.name }}" loading="lazy">
+              {% elif 'mouse' in pname or 'gaming' in pname %}
+                <img src="https://images.unsplash.com/photo-1527814050087-3793815479db?auto=format&fit=crop&w=700&q=85" alt="{{ product.name }}" loading="lazy">
+              {% else %}
+                <div class="product-placeholder"><span>✦</span><small>CloudCart</small></div>
+              {% endif %}
+              <span class="discount-badge">{% if loop.index == 1 %}-28%{% elif loop.index == 2 %}-18%{% elif loop.index == 3 %}-25%{% else %}-15%{% endif %}</span>
+              <button class="wishlist-button" type="button" aria-label="Add {{ product.name }} to wishlist" title="Wishlist">♡</button>
+              {% if product.stock is defined and product.stock|int <= 0 %}<span class="stock-badge">Out of stock</span>{% endif %}
+            </div>
+            <div class="product-info">
+              <p class="product-category">{% if 'headphone' in pname %}AUDIO ESSENTIALS{% elif 'watch' in pname %}SMART LIVING{% elif 'speaker' in pname %}PORTABLE AUDIO{% elif 'mouse' in pname or 'gaming' in pname %}GAMING GEAR{% else %}CLOUDCART PICKS{% endif %}</p>
+              <h3>{{ product.name }}</h3>
+              <div class="rating"><span>★★★★★</span><small>({{ [1234, 892, 1105, 768][(loop.index0) % 4] }})</small></div>
+              <div class="price-row"><strong>₹{{ "%.2f"|format(product.price|float) }}</strong><del>₹{{ "%.2f"|format((product.price|float * 1.25)) }}</del></div>
+              <form action="{{ url_for('add_to_cart', product_id=product.id) }}" method="post" class="add-cart-form">
+                <button class="add-cart" type="submit" {% if product.stock is defined and product.stock|int <= 0 %}disabled{% endif %}>🛒 <span>Add to Cart</span></button>
+                <button class="quick-add" type="submit" aria-label="Add {{ product.name }} to cart" {% if product.stock is defined and product.stock|int <= 0 %}disabled{% endif %}>→</button>
+              </form>
+            </div>
+          </article>
+        {% else %}
+          <div class="empty-products"><span>✦</span><h3>Your product shelf is waiting</h3><p>Add products to the products table in MySQL to display them here.</p></div>
+        {% endfor %}
+      </div>
+      <p class="search-empty" id="searchEmpty" hidden>No products match your search.</p>
+    </section>
+
+    <section class="promo-grid page-width" id="deals">
+      <article class="promo-card promo-dark">
+        <div><p>LIMITED TIME OFFER</p><h2>Gaming Gear<br><strong>Up to 40% Off</strong></h2><a href="#products">Shop Gaming <span>→</span></a></div>
+        <img src="https://images.unsplash.com/photo-1527814050087-3793815479db?auto=format&fit=crop&w=650&q=85" alt="Gaming mouse" loading="lazy">
+      </article>
+      <article class="promo-card promo-light">
+        <div><p>SMARTER EVERY DAY</p><h2>Smart Watches<br><strong>For a Healthier You</strong></h2><a href="#products">Shop Now <span>→</span></a></div>
+        <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=550&q=85" alt="Smart watch" loading="lazy">
+      </article>
+    </section>
+
+    <section class="testimonials page-width">
+      <div class="section-heading"><div><p class="eyebrow">REAL PEOPLE. REAL REVIEWS.</p><h2>Loved by Thousands <span>♥</span></h2></div><div class="testimonial-controls"><button aria-label="Previous review" id="reviewPrev">←</button><button aria-label="Next review" id="reviewNext">→</button></div></div>
+      <div class="review-grid" id="reviewGrid">
+        <article class="review-card"><div class="avatar avatar-one">R</div><div><h3>Rohit S.</h3><div class="review-stars">★★★★★</div><p>“Amazing product quality and super-fast delivery. CloudCart has everything I need.”</p></div></article>
+        <article class="review-card"><div class="avatar avatar-two">P</div><div><h3>Priya K.</h3><div class="review-stars">★★★★★</div><p>“Great prices and genuine products. My go-to store for gadgets!”</p></div></article>
+        <article class="review-card"><div class="avatar avatar-three">A</div><div><h3>Arjun M.</h3><div class="review-stars">★★★★★</div><p>“Excellent customer support and easy returns. Highly recommended!”</p></div></article>
+      </div>
+    </section>
+
+    <section class="newsletter page-width">
+      <div class="newsletter-icon">✉</div><div class="newsletter-copy"><h2>Stay in the Loop</h2><p>Get exclusive deals, new arrivals and tech insights straight to your inbox.</p></div>
+      <form class="newsletter-form" id="newsletterForm"><div><input type="email" placeholder="Enter your email address" required aria-label="Email address"><button type="submit">Subscribe</button></div><small>🛡 We respect your privacy. Unsubscribe anytime.</small><p id="newsletterMessage" aria-live="polite"></p></form>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-main page-width">
+      <div class="footer-brand"><a class="brand" href="#home"><span class="brand-mark">☁</span><span>CloudCart</span></a><p>Your one-stop shop for premium electronics and smart gadgets. Better tech. Brighter everyday.</p><div class="social-links"><a href="#home" aria-label="Instagram">◎</a><a href="#home" aria-label="YouTube">▶</a><a href="#home" aria-label="Twitter">𝕏</a><a href="#home" aria-label="Facebook">f</a></div></div>
+      <div><h3>Shop</h3><a href="#products">All Products</a><a href="#products">Headphones</a><a href="#products">Smart Watches</a><a href="#products">Bluetooth Speakers</a><a href="#products">Gaming Accessories</a></div>
+      <div><h3>Customer Service</h3><a href="{% if current_user.is_authenticated %}{{ url_for('my_orders') }}{% else %}{{ url_for('login') }}{% endif %}">Track Order</a><a href="#deals">Returns & Refunds</a><a href="#deals">Shipping Info</a><a href="#deals">FAQs</a><a href="#deals">Contact Us</a></div>
+      <div><h3>Company</h3><a href="#home">About Us</a><a href="#home">Careers</a><a href="#home">Terms of Service</a><a href="#home">Privacy Policy</a></div>
+      <div class="app-promo"><h3>Get the CloudCart feel</h3><p>Great tech, great deals, right at your fingertips.</p><span class="app-store">▶ Google Play</span><span class="app-store">● App Store</span></div>
+    </div>
+    <div class="footer-bottom page-width"><span>© 2026 CloudCart. All rights reserved.</span><div><a href="#home">Privacy Policy</a><a href="#home">Terms of Service</a><span>🇮🇳 India (IN) ⌄</span></div></div>
+  </footer>
+  <script>
+    const menuButton = document.getElementById('mobileMenu');
+    const nav = document.getElementById('mainNav');
+    menuButton?.addEventListener('click', () => {
+      const open = nav.classList.toggle('nav-open');
+      menuButton.setAttribute('aria-expanded', String(open));
+    });
+
+    const searchInput = document.getElementById('productSearch');
+    const cards = [...document.querySelectorAll('.product-card')];
+    const searchEmpty = document.getElementById('searchEmpty');
+    function filterProducts(query) {
+      let visible = 0;
+      cards.forEach(card => {
+        const match = card.dataset.name.includes(query.toLowerCase().trim());
+        card.hidden = !match;
+        if (match) visible++;
+      });
+      if (searchEmpty) searchEmpty.hidden = visible !== 0;
+    }
+    searchInput?.addEventListener('input', e => filterProducts(e.target.value));
+    document.querySelectorAll('[data-category]').forEach(link => {
+      link.addEventListener('click', () => {
+        const category = link.dataset.category;
+        const aliases = {headphone: 'headphone', watch: 'watch', speaker: 'speaker', mouse: 'mouse'};
+        filterProducts(aliases[category] || category);
+      });
+    });
+    document.querySelector('.category-tile.selected')?.addEventListener('click', () => filterProducts(''));
+
+    document.querySelectorAll('.wishlist-button').forEach(button => {
+      button.addEventListener('click', () => {
+        button.classList.toggle('wishlisted');
+        button.textContent = button.classList.contains('wishlisted') ? '♥' : '♡';
+      });
+    });
+    document.getElementById('newsletterForm')?.addEventListener('submit', e => {
+      e.preventDefault();
+      document.getElementById('newsletterMessage').textContent = 'Thanks for subscribing! Newsletter delivery needs a backend email service.';
+      e.target.reset();
+    });
+    const reviews = document.getElementById('reviewGrid');
+    document.getElementById('reviewPrev')?.addEventListener('click', () => reviews.scrollBy({left: -320, behavior: 'smooth'}));
+    document.getElementById('reviewNext')?.addEventListener('click', () => reviews.scrollBy({left: 320, behavior: 'smooth'}));
+  </script>
+</body>
+</html>

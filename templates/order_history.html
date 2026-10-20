@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#eeedff">
+  <title>My Orders | CloudCart</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/account_orders.css">
+</head>
+<body class="orders-page">
+  <div class="announcement">
+    <span>✦ Free shipping on orders over ₹999</span><i></i>
+    <span>↻ Easy 30-day returns</span><i></i>
+    <span>♢ Secure shopping</span>
+  </div>
+  <header class="orders-header">
+    <a class="brand" href="{{ url_for('home') }}"><span class="brand-mark">✦</span><span>CloudCart</span></a>
+    <nav><a href="{{ url_for('home') }}">Home</a><a href="{{ url_for('home') }}#products">Shop</a><a class="active" href="{{ url_for('my_orders') }}">My Orders</a></nav>
+    <div class="orders-header-actions"><span class="signed-in-label">YOUR ACCOUNT</span><a class="orders-home-button" href="{{ url_for('home') }}">Continue shopping <span>↗</span></a></div>
+  </header>
+
+  <main class="orders-main">
+    <section class="orders-intro">
+      <div>
+        <p class="eyebrow"><span>↗</span> YOUR CLOUDCART ACCOUNT</p>
+        <h1>My <em>Orders.</em></h1>
+        <p>Keep an eye on your purchases, delivery details and order status.</p>
+      </div>
+      <div class="orders-intro-art"><span class="orders-art-ring"></span><span class="orders-art-box">▣</span><span class="orders-art-spark">✦</span></div>
+    </section>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="orders-flashes" role="status">
+          {% for message in messages %}<p>{{ message }}</p>{% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <section class="orders-summary">
+      <div class="orders-summary-icon">▤</div>
+      <div><span>ORDER HISTORY</span><strong>{{ orders|length }} order{% if orders|length != 1 %}s{% endif %}</strong></div>
+      <p>All your recent CloudCart purchases, in one place.</p>
+      <a href="{{ url_for('home') }}#products">Explore products <span>→</span></a>
+    </section>
+
+    <section class="orders-list-section">
+      <div class="orders-list-heading"><div><p class="eyebrow">YOUR PURCHASES</p><h2>Recent orders</h2></div><span class="orders-private">♢ PRIVATE TO YOUR ACCOUNT</span></div>
+      {% for order in orders %}
+        <article class="order-card">
+          <div class="order-card-top">
+            <div class="order-number-wrap"><span class="order-icon">▣</span><div><small>ORDER NUMBER</small><h3>#{{ order.id }}</h3></div></div>
+            <span class="order-status
+              {% if order.status == 'Cancelled' %}status-cancelled{% elif order.status == 'Delivered' %}status-delivered{% else %}status-active{% endif %}">
+              <span></span>{{ order.status }}
+            </span>
+          </div>
+          <div class="order-card-details">
+            <div><span>ORDER DATE</span><strong>{{ order.created_at }}</strong></div>
+            <div><span>DELIVERY ADDRESS</span><strong>{{ order.address }}{% if order.city is defined and order.city %}, {{ order.city }}{% endif %}{% if order.postal_code is defined and order.postal_code %} – {{ order.postal_code }}{% endif %}</strong></div>
+            <div><span>ORDER TOTAL</span><strong class="order-total">₹{{ "%.2f"|format(order.total|float) }}</strong></div>
+          </div>
+          <div class="order-card-bottom">
+            <p>{% if order.status == 'Cancelled' %}This order has been cancelled.{% elif order.status == 'Delivered' %}Your order has been delivered.{% else %}Your order has been placed successfully.{% endif %}</p>
+            <div class="order-actions">
+              <a class="order-details-button" href="{{ url_for('order_detail', order_id=order.id) }}">View order details <span>→</span></a>
+              {% if order.status == 'Placed' %}
+                <form action="{{ url_for('cancel_order', order_id=order.id) }}" method="post" onsubmit="return confirm('Are you sure you want to cancel this order?');">
+                  <button class="order-cancel-button" type="submit">Cancel order</button>
+                </form>
+              {% endif %}
+            </div>
+          </div>
+        </article>
+      {% else %}
+        <div class="orders-empty">
+          <div class="orders-empty-icon">▤</div>
+          <p class="eyebrow">NOTHING HERE YET</p>
+          <h2>Your next great find starts here.</h2>
+          <p>Once you place an order, it will appear here with its status and details.</p>
+          <a class="account-submit empty-shop-button" href="{{ url_for('home') }}#products">Explore the collection <span>→</span></a>
+        </div>
+      {% endfor %}
+    </section>
+    <a class="orders-back-link" href="{{ url_for('home') }}">← Back to shopping</a>
+  </main>
+
+  <footer class="orders-footer"><a class="brand" href="{{ url_for('home') }}"><span class="brand-mark">✦</span><span>CloudCart</span></a><span>Better tech. Brighter everyday.</span><a href="{{ url_for('home') }}">Shop the collection ↗</a></footer>
+</body>
+</html>

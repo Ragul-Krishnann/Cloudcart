@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#eeedff">
+  <title>Order #{{ order.id }} | CloudCart</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/checkout_flow.css">
+</head>
+<body class="cc-flow-page">
+  <div class="cc-announcement"><span>✦ Thanks for choosing CloudCart</span><i></i><span>♢ Your order details, all in one place</span></div>
+  <header class="cc-flow-header">
+    <a class="cc-brand" href="{{ url_for('home') }}"><span class="cc-brand-mark">✦</span>CloudCart</a>
+    <nav class="cc-flow-nav"><a href="{{ url_for('home') }}">Shop</a><a href="{{ url_for('my_orders') }}">My orders</a></nav>
+    <a class="cc-back-link" href="{{ url_for('my_orders') }}">← All orders</a>
+  </header>
+
+  <main class="cc-flow-main cc-detail-main">
+    <section class="cc-flow-hero cc-detail-hero">
+      <div><p class="cc-eyebrow">ORDER DETAILS / #{{ order.id }}</p><h1>Your order, <em>at a glance.</em></h1><p>Review the items, delivery address and order information below.</p></div>
+      <div class="cc-hero-art" aria-hidden="true"><span class="cc-art-circle"></span><span class="cc-art-box">✓</span><span class="cc-art-spark">✦</span></div>
+    </section>
+
+    <section class="cc-order-status-banner">
+      <div class="cc-status-icon">{% if order.status == 'Cancelled' %}×{% elif order.status == 'Delivered' %}✓{% else %}↗{% endif %}</div>
+      <div><p class="cc-eyebrow">CURRENT ORDER STATUS</p><h2>{{ order.status }}</h2><p>{% if order.status == 'Cancelled' %}This order has been cancelled.{% elif order.status == 'Delivered' %}Your order has been delivered. Enjoy your purchase!{% else %}Your order has been placed. Thanks for shopping with CloudCart!{% endif %}</p></div>
+      <span class="cc-status-pill {% if order.status == 'Cancelled' %}cc-status-cancelled{% elif order.status == 'Delivered' %}cc-status-delivered{% else %}cc-status-active{% endif %}"><i></i>{{ order.status }}</span>
+    </section>
+
+    <div class="cc-detail-grid">
+      <section class="cc-panel cc-detail-items-panel">
+        <div class="cc-panel-heading"><div><p class="cc-eyebrow">WHAT YOU ORDERED</p><h2>Items in this order</h2></div><span class="cc-items-count">{{ items|length }} item{% if items|length != 1 %}s{% endif %}</span></div>
+        <div class="cc-detail-items">
+          {% for item in items %}
+          <article class="cc-detail-item">
+            <div class="cc-product-thumb cc-detail-thumb"><span>✦</span></div>
+            <div class="cc-cart-product"><strong>{{ item.product_name }}</strong><small>Quantity: {{ item.quantity }} · ₹{{ "%.2f"|format(item.price|float) }} each</small></div>
+            <strong class="cc-line-price">₹{{ "%.2f"|format(item.subtotal|float) }}</strong>
+          </article>
+          {% else %}
+          <p class="cc-muted-message">No item details were found for this order.</p>
+          {% endfor %}
+        </div>
+        <div class="cc-total-row cc-detail-total"><span>Order total</span><strong>₹{{ "%.2f"|format(order.total|float) }}</strong></div>
+      </section>
+
+      <aside class="cc-panel cc-order-info-panel">
+        <p class="cc-eyebrow">ORDER INFORMATION</p><h2>The details</h2>
+        <div class="cc-info-block"><span class="cc-info-icon">▤</span><div><small>ORDER NUMBER</small><strong>#{{ order.id }}</strong></div></div>
+        <div class="cc-info-block"><span class="cc-info-icon">◷</span><div><small>ORDER DATE</small><strong>{{ order.created_at }}</strong></div></div>
+        <div class="cc-info-block"><span class="cc-info-icon">⌖</span><div><small>DELIVERY ADDRESS</small><strong>{{ order.address }}{% if order.city %}, {{ order.city }}{% endif %}{% if order.postal_code %} – {{ order.postal_code }}{% endif %}</strong></div></div>
+        <div class="cc-info-block"><span class="cc-info-icon">₹</span><div><small>PAYMENT METHOD</small><strong>{{ order.payment_method }}</strong></div></div>
+        <div class="cc-info-block"><span class="cc-info-icon">✓</span><div><small>ORDER STATUS</small><strong>{{ order.status }}</strong></div></div>
+        <a class="cc-primary-button cc-info-button" href="{{ url_for('my_orders') }}">Back to my orders <span>→</span></a>
+      </aside>
+    </div>
+    <div class="cc-detail-bottom-links"><a href="{{ url_for('home') }}">← Continue shopping</a><span>Need help? Contact your project administrator.</span></div>
+  </main>
+  <footer class="cc-flow-footer"><a class="cc-brand" href="{{ url_for('home') }}"><span class="cc-brand-mark">✦</span>CloudCart</a><span>Better tech. Brighter everyday.</span><span>© CloudCart student project</span></footer>
+</body>
+</html>
