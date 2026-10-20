@@ -2,9 +2,7 @@ import os
 from decimal import Decimal
 
 import mysql.connector
-from decimal import Decimal
 
-import mysql.connector
 
 from flask import (
     Flask,
@@ -35,10 +33,7 @@ from werkzeug.security import (
 # APPLICATION CONFIGURATION
 # --------------------------------------------------
 
-if os.getenv("VERCEL"):
-    app = Flask(__name__, static_folder=None)
-else:
-    app = Flask(__name__, static_folder="public", static_url_path="")
+app = Flask(__name__, static_folder="public", static_url_path="")
 
 app.secret_key = os.getenv(
     "SECRET_KEY",
